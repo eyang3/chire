@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
-
+import RangeSlider from 'vue-range-slider'
 
 
 import Login from './components/Login.vue'
@@ -13,25 +13,26 @@ import Create from './components/Create.vue'
 import ManageContacts from './components/ManageContacts.vue'
 import Organization from './components/Organization.vue'
 import Settings from './components/Settings.vue'
+import Apply from './components/Apply.vue'
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
-
+Vue.use(RangeSlider);
 
 const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
-  { path: '/app', component: AdminPanel },
+  { path: '/apply/:id', component: Apply },
   {
     path: '/app/', component: AdminPanel, children: [{
       path: 'create', component: Create
     }, {
       path: 'viewall', component: ViewAllPositions
-    }, , {
+    }, {
       path: 'manageContacts', component: ManageContacts
     }, , {
       path: 'organization', component: Organization
-    }, , {
+    }, {
       path: 'settings', component: Settings
     }]
   },
@@ -44,5 +45,4 @@ const app = new Vue({
   mounted: function () {
     console.log('mounted');
   }
-
 }).$mount("#app");
