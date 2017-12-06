@@ -11,35 +11,32 @@
                         <div class="subheader">Register an Account</div>
 
                         <v-container fluid>
-                            <v-layout row>
+                            <v-layout row>                                
                                 <v-flex xs4>
-                                    <v-subheader>User Name</v-subheader>
                                 </v-flex>
-                                <v-flex xs8>
+                                <v-flex xs4>
                                     <v-text-field  label="Email" v-model="email" :rules="[rules.required, rules.email]"></v-text-field>
                                 </v-flex>
                             </v-layout>
-                            <v-layout row>
+                            <v-layout row>                                
                                 <v-flex xs4>
-                                    <v-subheader>Password</v-subheader>
                                 </v-flex>
-                                <v-flex xs8>
-                                    <v-text-field name="password" label="Password" id="testing" :append-icon="e1 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e1 = !e1)" :type="e1 ? 'password' : 'text'"></v-text-field>
+                                <v-flex xs4>
+                                    <v-text-field v-model="password" name="password" :rules="[rules.required, rules.match]" label="Password" id="testing" :append-icon="e1 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e1 = !e1)" :type="e1 ? 'password' : 'text'"></v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row>                                
+                                <v-flex xs4>
+                                </v-flex>
+                                <v-flex xs4>
+                                    <v-text-field v-model="passwordverify" name="verify" :rules="[rules.required, rules.match]" label="Verify Password" id="testing" :append-icon="e2 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e2 = !e2)" :type="e2 ? 'password' : 'text'"></v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout row>
                                 <v-flex xs4>
-                                    <v-subheader>Verify Password</v-subheader>
                                 </v-flex>
                                 <v-flex xs8>
-                                    <v-text-field name="verify" label="Verify Password" id="testing" :append-icon="e2 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e2 = !e2)" :type="e2 ? 'password' : 'text'"></v-text-field>
-                                </v-flex>
-                            </v-layout>
-                            <v-layout row>
-                                <v-flex xs4>
-                                </v-flex>
-                                <v-flex xs8>
-                                    <v-btn flat v-on:click="revert">Register</v-btn>
+                                    <v-btn flat @click.native="revert">Register</v-btn>
                                 </v-flex>
                             </v-layout>
                         </v-container>>
@@ -56,41 +53,51 @@
 
 <script>
 export default {
-    data() {
-        return {
-            clipped: true,
-            drawer: true,
-            fixed: false,
-            items: [
-                { icon: 'bubble_chart', title: 'Inspire' }
-            ],
-            miniVariant: true,
-            right: true,
-            rightDrawer: false,
-            title: 'Chire -- A better way to hire',
-            email: '',
-            e1: true,
-            e2: true,
-            rules: {
-                required: (value) => !!value || 'Required.',
-                email: (value) => {
-                    console.log(value);
-                    const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                    return pattern.test(value) || 'Invalid e-mail.'
-                }
-            },
-
-
-            methods: {
-                revert: function() {
-                    this.$router.push('/login');
-                }
-            }
+  data() {
+    return {
+      clipped: true,
+      drawer: true,
+      fixed: false,
+      pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      items: [{ icon: "bubble_chart", title: "Inspire" }],
+      miniVariant: true,
+      right: true,
+      rightDrawer: false,
+      title: "Chire -- A better way to hire",
+      email: "",
+      password: "",
+      passwordverify: "",
+      e1: true,
+      e2: true,
+      rules: {
+        required: value => !!value || "Required.",
+        email: value => {
+          return this.pattern.test(value) || "Invalid e-mail.";
+        },
+        match: () => {
+          return (
+            this.password == this.passwordverify || "Passwords Don't Match"
+          );
         }
+      }
+    };
+  },
+  methods: {
+    revert: function() {
+      console.log("action taken");
+      this.$router.push("/login");
     }
-}
+  },
+  computed: {
+    pass: function() {
+      return (
+        this.password == this.passwordverify && this.pattern.test(this.email)
+      );
+    }
+  }
+};
 </script>
 
 <style lang="stylus">
-  @import '../stylus/main'
+@import '../stylus/main';
 </style>

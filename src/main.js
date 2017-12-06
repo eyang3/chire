@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
-import MultipleFileUploader from 'vue2-multi-uploader'
+
 
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
@@ -14,10 +14,10 @@ import Organization from './components/Organization.vue'
 import Settings from './components/Settings.vue'
 import Apply from './components/Apply.vue'
 import ApplyJob from './components/ApplyJob.vue'
-
+import Dropzone from 'vue2-dropzone'
 Vue.use(Vuetify);
 Vue.use(VueRouter);
-Vue.use(MultipleFileUploader)
+Vue.use(Dropzone);
 
 const routes = [
   { path: '/login', component: Login },

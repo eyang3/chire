@@ -5,6 +5,7 @@
         <vue-editor v-model="content"></vue-editor>
         <v-layout row>
             <v-flex xs8>
+                <button @click="save">Save</button>
             </v-flex>
             <v-flex xs4>
 
@@ -15,12 +16,16 @@
 
 <script>
 import { VueEditor } from 'vue2-editor'
-import vueSlider from '../../node_modules/vue-slider-component/src/vue2-slider.vue';
+
 
 export default {
     components: {
-        VueEditor,
-        vueSlider
+        VueEditor
+    },
+    methods: {
+        save: function() {
+            console.log(this.content);
+        }
     },
     data() {
         return {
