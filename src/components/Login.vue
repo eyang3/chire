@@ -16,9 +16,7 @@
                         <center>
                             <v-btn  color="primary" class="blue--text darken-1"  v-on:click="login">Login</v-btn>
                             <v-btn  color="primary" class="blue--text darken-1"  v-on:click="createAccount">Create New Account</v-btn>
-                        </center>
-
-                        
+                        </center>                    
                     </v-flex>
                     <v-flex></v-flex>
                 </v-layout>

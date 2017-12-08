@@ -32,6 +32,7 @@
                                     <v-text-field v-model="passwordverify" name="verify" :rules="[rules.match]" label="Verify Password" id="testing" :append-icon="e2 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e2 = !e2)" :type="e2 ? 'password' : 'text'"></v-text-field>
                                 </v-flex>
                             </v-layout>
+                            <div style="color: red">{{error}}</div>
                             <v-layout row>
                                 <v-flex xs4>
                                 </v-flex>
@@ -67,6 +68,7 @@ export default {
       rightDrawer: false,
       title: "Chire -- A better way to hire",
       email: "",
+      error: '',
       password: "",
       passwordverify: "",
       e1: true,
@@ -93,9 +95,11 @@ export default {
         .post("/api/create", { username: this.email, password: this.password })
         .then(response => {
           if(response.data.status == 'success') {
+              this.error = '';
               this.$cookies.set("auth", response.data.message);
+              this.$router.push('/app');
           } else{
-              console.log('error');
+              this.error = response.data.message;
           }
         });
     }
