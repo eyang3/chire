@@ -10,8 +10,9 @@
                         </center>
                         <v-text-field v-model="email" label="Email" class="input-group--focused" required></v-text-field>
                         <v-text-field v-model="password" label="Password" class="input-group--focused" type="password" required></v-text-field>
+                        
+                        <div style="color: red">{{error}}</div>
                         <v-spacer></v-spacer>
-                        <div color="red">{{error}}</div>
                         <center>
                             <v-btn  color="primary" class="blue--text darken-1"  v-on:click="login">Login</v-btn>
                             <v-btn  color="primary" class="blue--text darken-1"  v-on:click="createAccount">Create New Account</v-btn>
