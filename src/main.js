@@ -15,9 +15,11 @@ import Settings from './components/Settings.vue'
 import Apply from './components/Apply.vue'
 import ApplyJob from './components/ApplyJob.vue'
 import Dropzone from 'vue2-dropzone'
+
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(Dropzone);
+Vue.use(require('vue-cookies'))
 
 const routes = [
   { path: '/login', component: Login },

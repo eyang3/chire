@@ -15,28 +15,28 @@
                                 <v-flex xs4>
                                 </v-flex>
                                 <v-flex xs4>
-                                    <v-text-field  label="Email" v-model="email" :rules="[rules.required, rules.email]"></v-text-field>
+                                    <v-text-field  label="Email" v-model="email" :rules="[rules.email]"></v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout row>                                
                                 <v-flex xs4>
                                 </v-flex>
                                 <v-flex xs4>
-                                    <v-text-field v-model="password" name="password" :rules="[rules.required, rules.match]" label="Password" id="testing" :append-icon="e1 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e1 = !e1)" :type="e1 ? 'password' : 'text'"></v-text-field>
+                                    <v-text-field v-model="password" name="password" :rules="[rules.match]" label="Password" id="testing" :append-icon="e1 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e1 = !e1)" :type="e1 ? 'password' : 'text'"></v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout row>                                
                                 <v-flex xs4>
                                 </v-flex>
                                 <v-flex xs4>
-                                    <v-text-field v-model="passwordverify" name="verify" :rules="[rules.required, rules.match]" label="Verify Password" id="testing" :append-icon="e2 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e2 = !e2)" :type="e2 ? 'password' : 'text'"></v-text-field>
+                                    <v-text-field v-model="passwordverify" name="verify" :rules="[rules.match]" label="Verify Password" id="testing" :append-icon="e2 ? 'visibility_off' : 'visibility'" :append-icon-cb="() => (e2 = !e2)" :type="e2 ? 'password' : 'text'"></v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout row>
                                 <v-flex xs4>
                                 </v-flex>
                                 <v-flex xs8>
-                                    <v-btn flat @click.native="revert">Register</v-btn>
+                                    <v-btn color="primary" @click.native="revert" :disabled = "!pass">Register</v-btn>
                                 </v-flex>
                             </v-layout>
                         </v-container>>
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+var axios = require("axios");
+
 export default {
   data() {
     return {
@@ -72,6 +74,9 @@ export default {
       rules: {
         required: value => !!value || "Required.",
         email: value => {
+          if (value == null) {
+            return true;
+          }
           return this.pattern.test(value) || "Invalid e-mail.";
         },
         match: () => {
@@ -84,8 +89,15 @@ export default {
   },
   methods: {
     revert: function() {
-      console.log("action taken");
-      this.$router.push("/login");
+      axios
+        .post("/api/create", { username: this.email, password: this.password })
+        .then(response => {
+          if(response.data.status == 'success') {
+              this.$cookies.set("auth", response.data.message);
+          } else{
+              console.log('error');
+          }
+        });
     }
   },
   computed: {

@@ -8,13 +8,16 @@
                         <center>
                             <img src="/public/v.png" alt="Chire" class="mb-5" />
                         </center>
-                        <v-text-field label="Email" class="input-group--focused" required></v-text-field>
-                        <v-text-field label="Password" class="input-group--focused" type="password" required></v-text-field>
+                        <v-text-field v-model="email" label="Email" class="input-group--focused" required></v-text-field>
+                        <v-text-field v-model="password" label="Password" class="input-group--focused" type="password" required></v-text-field>
                         <v-spacer></v-spacer>
+                        <div color="red">{{error}}</div>
                         <center>
-                            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Login</v-btn>
-                            <v-btn class="blue--text darken-1" flat v-on:click="createAccount">Create New Account</v-btn>
+                            <v-btn  color="primary" class="blue--text darken-1"  v-on:click="login">Login</v-btn>
+                            <v-btn  color="primary" class="blue--text darken-1"  v-on:click="createAccount">Create New Account</v-btn>
                         </center>
+
+                        
                     </v-flex>
                     <v-flex></v-flex>
                 </v-layout>
@@ -24,25 +27,43 @@
 </template>
 
 <script>
+var axios = require("axios");
 export default {
     data() {
         return {
             clipped: false,
             drawer: true,
             fixed: false,
+            email: '',
+            password: '',
             items: [
                 { icon: 'bubble_chart', title: 'Inspire' }
             ],
             miniVariant: false,
             right: true,
             rightDrawer: false,
-            title: 'Chire'
+            title: 'Chire',
+            error: ''
         }
     },
     methods: {
         createAccount() {
             this.$router.push('/register');
+        }, 
+        login() {            
+            return axios.post("/api/login", {username: this.email, password:this.password})
+                .then((response) => {
+                    if(response.data.status === 'error') {
+                        this.error = response.data.message;
+                    } else {
+                        this.error = '';
+                        this.$cookies.set("auth", response.data.message);
+                        this.$router.push('/app')
+                    }
+                })
         }
+
+
     }
 }
 </script>
