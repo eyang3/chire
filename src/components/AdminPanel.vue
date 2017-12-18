@@ -64,8 +64,9 @@ export default {
     settings: []
   }),
   methods: {
-    navigate: function(item) {
+    navigate: function(item) {      
       this.$router.push({ path: "/app/" + item.page });
+      this.$root.$emit(item.page);
     }
   },
   mounted: function() {

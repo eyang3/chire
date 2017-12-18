@@ -55,8 +55,7 @@ export default {
                     if(response.data.status === 'error') {
                         this.error = response.data.message;
                     } else {
-                        this.error = '';
-                        console.log(response)
+                        this.error = '';                        
                         this.$cookies.set("auth", response.data.message);
                         this.$router.push('/app')
                     }
