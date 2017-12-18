@@ -14,28 +14,7 @@
                             <a href="#!" class="body-2 black--text">EDIT</a>
                         </v-flex>
                     </v-layout>
-                    <v-list-group v-else-if="item.children" v-model="item.model" no-action>
-                        <v-list-tile slot="item" @click="">
-                            <v-list-tile-action>
-                                <v-icon>{{ item.model ? item.icon : item['icon-alt'] }}</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>
-                                    {{ item.text }}
-                                </v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile v-for="(child, i) in item.children" :key="i" @click="">
-                            <v-list-tile-action v-if="child.icon">
-                                <v-icon>{{ child.icon }}</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>
-                                    {{ child.text }}
-                                </v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                    </v-list-group>
+                   
                     <v-list-tile v-else @click="navigate(item)">
                         <v-list-tile-action>
                             <v-icon>{{ item.icon }}</v-icon>
@@ -62,33 +41,52 @@
 </template>
 
 <script>
+var axios = require("axios");
+var _ = require("lodash");
 
 export default {
-    data: () => ({
-        title: 'Chire -- A better way to hire',
-        items: [
-            { page: 'create', icon: 'add', text: 'Create Position' },
-            { page: 'viewall', icon: 'content_copy', text: 'View Positions' },
-            { page: 'manageContacts', icon: 'contacts', text: 'Manage Contacts' },
-            { page: 'organization', icon: 'supervisor_account', text: 'Organization' },
-            { page: 'settings', icon: 'settings', text: 'Settings' },
-
-        ],
-        settings: [
-        ]
-    }),
-    methods: {
-        navigate: function(item) {
-            this.$router.push({ path: '/app/' + item.page });
-
-        }
+  data: () => ({
+    title: "Chire -- A better way to hire",
+    items: [
+      { page: "create", icon: "add", text: "Create Position" },
+      { page: "viewPostedJobs", icon: "content_copy", text: "View Positions" },
+      { page: "manageContacts", icon: "contacts", text: "Manage Contacts" },
+      { page: "toEvaluate", icon: "show_chart", text: "Evaluate Resumes" },
+      { page: "searchjobs", icon: "search", text: "Search Jobs" },
+      {
+        page: "organization",
+        icon: "supervisor_account",
+        text: "Organization"
+      },
+      
+      { page: "settings", icon: "settings", text: "Settings" }
+    ],
+    settings: []
+  }),
+  methods: {
+    navigate: function(item) {
+      this.$router.push({ path: "/app/" + item.page });
     }
-
-}
+  },
+  mounted: function() {
+    axios
+      .get("/api/functionsByRole", { withCredentials: true })
+      .then(response => {
+          this.items = _.filter(this.items, (item) => {
+              if(response.data.indexOf(item.page) != -1) {
+                  return true;
+              }
+              return false;
+          })
+      });
+  }
+};
 </script>
 
 <style lang="stylus">
-  #contacts
-    main .container
-      height: 660px
+#contacts {
+    main .container {
+        height: 660px;
+    }
+}
 </style>

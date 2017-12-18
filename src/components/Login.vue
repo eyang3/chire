@@ -56,6 +56,7 @@ export default {
                         this.error = response.data.message;
                     } else {
                         this.error = '';
+                        console.log(response)
                         this.$cookies.set("auth", response.data.message);
                         this.$router.push('/app')
                     }

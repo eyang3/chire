@@ -27,7 +27,7 @@ const routes = [
   {
     path: '/apply/:user', component: Apply, children: [
       { path: 'viewall', component: ViewAllPositions, props: true },
-      { path: 'job/:job', component: ApplyJob},
+      { path: 'job/:job', component: ApplyJob },
       { path: 'settings', component: Settings }
     ]
   },
@@ -38,7 +38,7 @@ const routes = [
       path: 'viewall', component: ViewAllPositions
     }, {
       path: 'manageContacts', component: ManageContacts
-    }, , {
+    }, {
       path: 'organization', component: Organization
     }, {
       path: 'settings', component: Settings
