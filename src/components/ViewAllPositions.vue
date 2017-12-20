@@ -34,6 +34,7 @@
                     </tr>
                 </template>
             </v-data-table>
+        </v-card>
     </main>
 </template>
 

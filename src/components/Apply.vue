@@ -66,7 +66,7 @@
 
 export default {
     data: () => ({
-        title: 'Chire -- A better way to hire',
+        title: 'Chire -- A better way to hire',        
         items: [
             { page: 'viewall', icon: 'content_copy', text: 'View Positions' },
             { page: 'settings', icon: 'settings', text: 'Settings' },
