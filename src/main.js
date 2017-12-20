@@ -21,6 +21,7 @@ Vue.use(VueRouter);
 Vue.use(Dropzone);
 Vue.use(require('vue-cookies'))
 
+
 const routes = [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
@@ -35,7 +36,7 @@ const routes = [
     path: '/app/', component: AdminPanel, children: [{
       path: 'create', component: Create
     }, {
-      path: 'viewall', component: ViewAllPositions
+      path: 'viewPostedJobs', component: ViewAllPositions
     }, {
       path: 'manageContacts', component: ManageContacts
     }, {

@@ -1,7 +1,13 @@
 <template>
-    <v-app light>
-        <v-navigation-drawer class="pb-0" permanent clipped height="100%" light>
-            <v-list dense>
+  <v-app id="app" :dark="dark">
+    <v-navigation-drawer
+      v-model="primaryDrawer.model"    
+      :clipped="true"            
+      absolute
+      overflow
+      app
+    >
+      <v-list dense>
                 <template v-for="(item, i) in items">
                     <v-divider v-if="item.page == 'organization'"></v-divider>
                     <v-layout row v-if="item.heading" align-center :key="i">
@@ -27,26 +33,35 @@
                     </v-list-tile>
                 </template>
             </v-list>
-        </v-navigation-drawer>
-        <v-toolbar fixed>
-            <v-toolbar-title v-text="title"></v-toolbar-title>
-            <v-spacer></v-spacer>
-        </v-toolbar>
-        <main>
-            <v-container fluid>
-                <router-view></router-view>
-            </v-container>
-        </main>
-    </v-app>
+    </v-navigation-drawer>
+    <v-toolbar app absolute :clipped-left="true">    
+      <v-toolbar-title>Chire -- A Better Way to Hire</v-toolbar-title>
+    </v-toolbar>
+    <v-content>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 var axios = require("axios");
 var _ = require("lodash");
-
 export default {
   data: () => ({
-    title: "Chire -- A better way to hire",
+    dark: false,
+    drawers: ["Permanent", "Persistent", "Temporary"],
+    primaryDrawer: {
+      model: null,
+      type: "persistent",
+      clipped: false,
+      floating: false,
+      mini: false
+    },
+    footer: {
+      fixed: false
+    },
     items: [
       { page: "create", icon: "add", text: "Create Position" },
       { page: "viewPostedJobs", icon: "content_copy", text: "View Positions" },
@@ -58,36 +73,15 @@ export default {
         icon: "supervisor_account",
         text: "Organization"
       },
-      
+
       { page: "settings", icon: "settings", text: "Settings" }
-    ],
-    settings: []
+    ]
   }),
   methods: {
-    navigate: function(item) {      
+    navigate: function(item) {
       this.$router.push({ path: "/app/" + item.page });
       this.$root.$emit(item.page);
     }
-  },
-  mounted: function() {
-    axios
-      .get("/api/functionsByRole", { withCredentials: true })
-      .then(response => {
-          this.items = _.filter(this.items, (item) => {
-              if(response.data.indexOf(item.page) != -1) {
-                  return true;
-              }
-              return false;
-          })
-      });
   }
 };
 </script>
-
-<style lang="stylus">
-#contacts {
-    main .container {
-        height: 660px;
-    }
-}
-</style>

@@ -1,7 +1,16 @@
 <template>
+
     <main>
+      <div align="right" style="position: absolute; align: right; right: 15px">
+        <v-alert color="success" dismissible transition="scale-transition" style="position:relative; z-index:100" v-model="showAlert">
+          Job Added!
+        </v-alert>
+      </div>
+
         <v-text-field label="Title" class="input-group--focused" v-model="title" required></v-text-field>
-        <v-text-field label="Salary -- Visible only to evaluators" class="input-group--focused" v-model="value"></v-text-field>
+        <v-text-field label="Category" class="input-group--focused" v-model="category"></v-text-field>
+        <v-text-field label="Keywords" class="input-group--focused" v-model="keywords"></v-text-field>
+        <v-text-field label="Salary -- Visible only to evaluators" class="input-group--focused" v-model="value"></v-text-field>                
         <vue-editor v-model="content" placeholder="Position Description"></vue-editor>
         <br>
         <v-layout row>
@@ -36,10 +45,20 @@ export default {
           withCredentials: true,
           title: this.title,
           salary: this.value,
-          body: this.content
+          body: this.content,
+          category: this.category,
+          keywords: this.keywords
         })
         .then(response => {
           var resp = JSON.parse(response.data.message);
+          this.showAlert = true;
+          if (response.data.status === "success") {
+            this.showAlert = true;
+            this.showError = false;
+          } else {
+            this.showAlert = false;
+            this.showError = true;
+          }
           this.id = resp.id;
         });
     }
@@ -49,16 +68,24 @@ export default {
       this.id = null;
       this.title = "";
       this.content = "";
+      this.category = "";
+      this.keywords = "";
       this.value = null;
     });
   },
   data() {
     return {
+      showAlert: false,
+      showError: false,
       id: null,
       title: "",
       content: "",
+      keywords: "",
+      category: "",
       value: 10
     };
   }
 };
 </script>
+
+
