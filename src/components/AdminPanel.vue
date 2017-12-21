@@ -82,6 +82,18 @@ export default {
       this.$router.push({ path: "/app/" + item.page });
       this.$root.$emit(item.page);
     }
+  },
+  mounted: function() {
+    axios
+      .get("/api/functionsByRole", { withCredentials: true })
+      .then(response => {
+        this.items = _.filter(this.items, item => {
+          if (response.data.indexOf(item.page) != -1) {
+            return true;
+          }
+          return false;
+        });
+      });
   }
 };
 </script>
