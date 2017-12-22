@@ -85,7 +85,7 @@ export default {
   },
   mounted: function() {
     axios
-      .get("/api/functionsByRole", { withCredentials: true })
+      .get("/api/ar/functionsByRole", { withCredentials: true })
       .then(response => {
         this.items = _.filter(this.items, item => {
           if (response.data.indexOf(item.page) != -1) {
