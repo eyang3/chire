@@ -5,7 +5,7 @@
                 <v-spacer></v-spacer>
                 <v-text-field append-icon="search" label="Search" single-line hide-details ></v-text-field>
             </v-card-title>
-            <v-data-table  v-bind:search="search" v-model="selected" v-bind:headers="headers" v-bind:items="items" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
+            <v-data-table  v-bind:search="search" v-model="selected" v-bind:headers="headers" v-bind:items.sync="items" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
                 <template slot="headers" scope="props">
                     <tr>
                         <th>
@@ -22,14 +22,9 @@
                         <td>
                             <v-checkbox primary hide-details :input-value="props.selected"></v-checkbox>
                         </td>
-                        <td>{{ props.item.name }}</td>
-                        <td class="text-xs-right">{{ props.item.calories }}</td>
-                        <td class="text-xs-right">{{ props.item.fat }}</td>
-                        <td class="text-xs-right">{{ props.item.carbs }}</td>
-                        <td class="text-xs-right">{{ props.item.protein }}</td>
-                        <td class="text-xs-right">{{ props.item.sodium }}</td>
-                        <td class="text-xs-right">{{ props.item.calcium }}</td>
-                        <td class="text-xs-right">{{ props.item.iron }}</td>
+                        <td class="text-xs-right">{{ props.item.title }}</td>
+                        <td class="text-xs-right">{{ props.item.category }}</td>
+                        <td class="text-xs-right">{{ props.item.keywords }}</td>            
                     </tr>
                 </template>
             </v-data-table>
@@ -52,7 +47,6 @@ export default {
       headers: [
         {
           text: "Title",
-          align: "left",
           value: "title"
         },
         { text: "Category", value: "category" },
@@ -75,10 +69,10 @@ export default {
       }
     }
   },
-  mounted: () => {
-    console.log("doing shit");
+  mounted: function() {
+    this.$emit("Hello")
     axios.get("/api/ar/ListMyJobs", { withCredentials: true }).then(result => {
-      console.log(result);
+      this.items = result.data
     });
   }
 };
