@@ -11,7 +11,7 @@
                         <th>
                             <v-checkbox primary hide-details @click.native="toggleAll" :input-value="props.all" :indeterminate="props.indeterminate"></v-checkbox>
                         </th>
-                        <th v-for="header in props.headers" :key="header.text" :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']" @click="changeSort(header.value)">
+                        <th v-for="header in props.headers" :key="header.text" :class="['text-xs-right', 'column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']" @click="changeSort(header.value)">
                             <v-icon>arrow_upward</v-icon>
                             {{ header.text }}
                         </th>
@@ -45,10 +45,7 @@ export default {
       },
       selected: [],
       headers: [
-        {
-          text: "Title",
-          value: "title"
-        },
+        { text: "Title", value: "title"},
         { text: "Category", value: "category" },
         { text: "Keywords", value: "keywords" }
       ],
@@ -70,9 +67,9 @@ export default {
     }
   },
   mounted: function() {
-    this.$emit("Hello")
+    this.$emit("Hello");
     axios.get("/api/ar/ListMyJobs", { withCredentials: true }).then(result => {
-      this.items = result.data
+      this.items = result.data;
     });
   }
 };
