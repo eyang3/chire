@@ -5,7 +5,9 @@
                 <v-spacer></v-spacer>
                 <v-text-field append-icon="search" label="Search" single-line hide-details ></v-text-field>
             </v-card-title>
-            <v-data-table  v-bind:search="search" v-model="selected" v-bind:headers="headers" v-bind:items.sync="items" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
+            <v-data-table  v-bind:search="search" v-model="selected" 
+            v-bind:headers="headers" 
+            v-bind:items.sync="items" v-bind:total-items.sync="totalItems" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
                 <template slot="headers" scope="props">
                     <tr>
                         <th>
@@ -49,7 +51,8 @@ export default {
         { text: "Category", value: "category" },
         { text: "Keywords", value: "keywords" }
       ],
-      items: []
+      items: [],
+      totalItems: 0 
     };
   },
   methods: {
@@ -69,7 +72,9 @@ export default {
   mounted: function() {
     this.$emit("Hello");
     axios.get("/api/ar/ListMyJobs", { withCredentials: true }).then(result => {
-      this.items = result.data;
+      //this.items = result.data.data.pages;
+      this.items = result.data.pages;
+      this.totalItems = result.data.totalRecords;
     });
   }
 };
