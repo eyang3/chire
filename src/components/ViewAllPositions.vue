@@ -13,7 +13,8 @@
                         <th>
                             <v-checkbox primary hide-details @click.native="toggleAll" :input-value="props.all" :indeterminate="props.indeterminate"></v-checkbox>
                         </th>
-                        <th v-for="header in props.headers" :key="header.text" :class="['text-xs-right', 'column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']" @click="changeSort(header.value)">
+                        <th v-for="header in props.headers" :key="header.text" :class="['text-xs-right', 'column sortable', pagination.descending ? 'desc' : 'asc', 
+                        header.value === pagination.sortBy ? 'active' : '']" @click="changeSort(header.value)">
                             <v-icon>arrow_upward</v-icon>
                             {{ header.text }}
                         </th>
@@ -43,24 +44,42 @@ export default {
     return {
       search: "",
       pagination: {
-        sortBy: "name"
       },
       selected: [],
       headers: [
-        { text: "Title", value: "title"},
+        { text: "Title", value: "title" },
         { text: "Category", value: "category" },
         { text: "Keywords", value: "keywords" }
       ],
       items: [],
-      totalItems: 0 
+      cache: [],
+      pageStart: 0,
+      totalItems: 0,
+      cacheSize: 100
     };
   },
+  watch: {
+    pagination: {
+      handler() {
+          let page = this.pagination.page;
+          let rowsPerPage = this.pagination.rowsPerPage;
+          let pageRange = (this.cacheSize / rowsPerPage);
+          if((page < this.pageStart) || (page > (this.pageStart + pageRange))) {
+          }  else {
+              this.items = this.cache.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+          }       
+      },
+      deep: true
+    }
+  },
+
   methods: {
     toggleAll() {
       if (this.selected.length) this.selected = [];
       else this.selected = this.items.slice();
     },
     changeSort(column) {
+      console.log(column);
       if (this.pagination.sortBy === column) {
         this.pagination.descending = !this.pagination.descending;
       } else {
@@ -73,7 +92,9 @@ export default {
     this.$emit("Hello");
     axios.get("/api/ar/ListMyJobs", { withCredentials: true }).then(result => {
       //this.items = result.data.data.pages;
-      this.items = result.data.pages;
+      console.log(this.pagination)
+      this.cache = result.data.pages;
+      this.items = this.cache.slice(0,this.pagination.rowsPerPage);
       this.totalItems = result.data.totalRecords;
     });
   }
