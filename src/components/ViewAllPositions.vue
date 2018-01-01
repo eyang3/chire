@@ -44,6 +44,7 @@ export default {
     return {
       search: "",
       pagination: {
+        sortBy: ""
       },
       selected: [],
       headers: [
@@ -53,21 +54,49 @@ export default {
       ],
       items: [],
       cache: [],
-      pageStart: 0,
+      lastSort: "",
+      pageStart: 1,
       totalItems: 0,
-      cacheSize: 100
+      cacheSize: 10
     };
   },
   watch: {
     pagination: {
       handler() {
-          let page = this.pagination.page;
-          let rowsPerPage = this.pagination.rowsPerPage;
-          let pageRange = (this.cacheSize / rowsPerPage);
-          if((page < this.pageStart) || (page > (this.pageStart + pageRange))) {
-          }  else {
-              this.items = this.cache.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-          }       
+        let page = this.pagination.page;
+        let rowsPerPage = this.pagination.rowsPerPage;
+        let pageRange = this.cacheSize / rowsPerPage;
+        let currentPageStart =
+          Math.floor((page - 1) / (this.cacheSize / rowsPerPage)) + 1;
+        console.log(currentPageStart, this.pageStart)
+        if (currentPageStart != this.pageStart) {        
+          axios
+            .get(
+              `/api/ar/ListMyJobs?page=${currentPageStart}&pageSize=${this
+                .cacheSize}`,
+              { withCredentials: true }
+            )
+            .then(result => {
+              this.cache = result.data.pages;
+              if (currentPageStart > this.pageStart) {
+                this.items = this.cache.slice(0, this.pagination.rowsPerPage);
+              } else {
+                console.log(this.cache.length - this.pagination.rowsPerPage,
+                  this.pagination.rowsPerPage)
+                this.items = this.cache.slice(
+                  this.cache.length - this.pagination.rowsPerPage,
+                  this.cache.length
+                );
+              }
+              this.pageStart = currentPageStart;
+            });
+        } else {
+          let subPage = (page - 1) % Math.floor(this.cacheSize / rowsPerPage);
+          this.items = this.cache.slice(
+            subPage * rowsPerPage,
+            (subPage + 1) * rowsPerPage
+          );
+        }
       },
       deep: true
     }
@@ -90,13 +119,15 @@ export default {
   },
   mounted: function() {
     this.$emit("Hello");
-    axios.get("/api/ar/ListMyJobs", { withCredentials: true }).then(result => {
-      //this.items = result.data.data.pages;
-      console.log(this.pagination)
-      this.cache = result.data.pages;
-      this.items = this.cache.slice(0,this.pagination.rowsPerPage);
-      this.totalItems = result.data.totalRecords;
-    });
+    axios
+      .get(`/api/ar/ListMyJobs?pageSize=${this.cacheSize}`, {
+        withCredentials: true
+      })
+      .then(result => {
+        this.cache = result.data.pages;
+        this.items = this.cache.slice(0, this.pagination.rowsPerPage);
+        this.totalItems = result.data.totalRecords;
+      });
   }
 };
 </script>
