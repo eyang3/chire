@@ -27,7 +27,8 @@
                         </td>
                         <td class="text-xs-right">{{ props.item.title }}</td>
                         <td class="text-xs-right">{{ props.item.category }}</td>
-                        <td class="text-xs-right">{{ props.item.keywords }}</td>            
+                        <td class="text-xs-right">{{ props.item.keywords }}</td>
+                        
                     </tr>
                 </template>
             </v-data-table>
@@ -50,12 +51,14 @@ export default {
       headers: [
         { text: "Title", value: "title" },
         { text: "Category", value: "category" },
-        { text: "Keywords", value: "keywords" }
+        { text: "Keywords", value: "keywords" },
+        { text: "Actions", value: "actions" }
       ],
       items: [],
       cache: [],
       lastSort: "",
       pageStart: 1,
+      lastDirection: false,
       totalItems: 0,
       cacheSize: 10
     };
@@ -63,17 +66,30 @@ export default {
   watch: {
     pagination: {
       handler() {
+        
         let page = this.pagination.page;
         let rowsPerPage = this.pagination.rowsPerPage;
         let pageRange = this.cacheSize / rowsPerPage;
         let currentPageStart =
           Math.floor((page - 1) / (this.cacheSize / rowsPerPage)) + 1;
-        console.log(currentPageStart, this.pageStart)
-        if (currentPageStart != this.pageStart) {        
+        let dir = "ASC";
+        if (this.pagination.descending) {
+          dir = "DESC";
+        }
+
+        if (
+          currentPageStart != this.pageStart ||
+          this.pagination.sortBy != this.lastSort ||
+          this.pagination.descending != this.lastDirection
+        ) {
+          this.lastSort = this.pagination.sortBy
+          this.lastDirection = this.pagination.descending
+          console.log(`/api/ar/ListMyJobs?page=${currentPageStart}&pageSize=${this
+                .cacheSize}&sortBy=${this.pagination.sortBy}&dir=${dir}`);
           axios
             .get(
               `/api/ar/ListMyJobs?page=${currentPageStart}&pageSize=${this
-                .cacheSize}`,
+                .cacheSize}&sortBy=${this.pagination.sortBy}&dir=${dir}`,
               { withCredentials: true }
             )
             .then(result => {
@@ -81,8 +97,6 @@ export default {
               if (currentPageStart > this.pageStart) {
                 this.items = this.cache.slice(0, this.pagination.rowsPerPage);
               } else {
-                console.log(this.cache.length - this.pagination.rowsPerPage,
-                  this.pagination.rowsPerPage)
                 this.items = this.cache.slice(
                   this.cache.length - this.pagination.rowsPerPage,
                   this.cache.length
@@ -108,7 +122,6 @@ export default {
       else this.selected = this.items.slice();
     },
     changeSort(column) {
-      console.log(column);
       if (this.pagination.sortBy === column) {
         this.pagination.descending = !this.pagination.descending;
       } else {
