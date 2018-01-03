@@ -5,6 +5,7 @@
       :clipped="true"            
       absolute
       overflow
+      persistant
       app
     >
       <v-list dense>
@@ -35,6 +36,7 @@
             </v-list>
     </v-navigation-drawer>
     <v-toolbar app absolute :clipped-left="true">    
+    <v-toolbar-side-icon @click.stop="primaryDrawer.model = !primaryDrawer.model" v-if="primaryDrawer.type !== 'permanent'"></v-toolbar-side-icon>
       <v-toolbar-title>Chire -- A Better Way to Hire</v-toolbar-title>
     </v-toolbar>
     <v-content>

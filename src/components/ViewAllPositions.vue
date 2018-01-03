@@ -66,7 +66,6 @@ export default {
   watch: {
     pagination: {
       handler() {
-        
         let page = this.pagination.page;
         let rowsPerPage = this.pagination.rowsPerPage;
         let pageRange = this.cacheSize / rowsPerPage;
@@ -82,10 +81,8 @@ export default {
           this.pagination.sortBy != this.lastSort ||
           this.pagination.descending != this.lastDirection
         ) {
-          this.lastSort = this.pagination.sortBy
-          this.lastDirection = this.pagination.descending
-          console.log(`/api/ar/ListMyJobs?page=${currentPageStart}&pageSize=${this
-                .cacheSize}&sortBy=${this.pagination.sortBy}&dir=${dir}`);
+          this.lastSort = this.pagination.sortBy;
+          this.lastDirection = this.pagination.descending;
           axios
             .get(
               `/api/ar/ListMyJobs?page=${currentPageStart}&pageSize=${this
@@ -94,15 +91,12 @@ export default {
             )
             .then(result => {
               this.cache = result.data.pages;
-              if (currentPageStart > this.pageStart) {
-                this.items = this.cache.slice(0, this.pagination.rowsPerPage);
-              } else {
-                this.items = this.cache.slice(
-                  this.cache.length - this.pagination.rowsPerPage,
-                  this.cache.length
-                );
-              }
-              this.pageStart = currentPageStart;
+              let subPage =
+                (page - 1) % Math.floor(this.cacheSize / rowsPerPage);
+              this.items = this.cache.slice(
+                subPage * rowsPerPage,
+                (subPage + 1) * rowsPerPage
+              );
             });
         } else {
           let subPage = (page - 1) % Math.floor(this.cacheSize / rowsPerPage);
