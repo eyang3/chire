@@ -3,9 +3,9 @@
            <v-card>
             <v-card-title>
                 <v-spacer></v-spacer>
-                <v-text-field append-icon="search" label="Search" single-line hide-details ></v-text-field>
+                <v-text-field v-model = "search" v-on:keyup = "searchFunction" append-icon="search" label="Search" single-line hide-details ></v-text-field>
             </v-card-title>
-            <v-data-table  v-bind:search="search" v-model="selected" 
+            <v-data-table  v-model="selected" 
             v-bind:headers="headers" 
             v-bind:items.sync="items" v-bind:total-items.sync="totalItems" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
                 <template slot="headers" scope="props">
@@ -45,8 +45,10 @@ export default {
     return {
       search: "",
       pagination: {
-        sortBy: ""
+        sortBy: "",
+        searchTerm: ""
       },
+      triggered: false,
       selected: [],
       headers: [
         { text: "Title", value: "title" },
@@ -66,6 +68,10 @@ export default {
   watch: {
     pagination: {
       handler() {
+        let freeText = "";
+        if (this.pagination.searchTerm != "") {
+          freeText = `&freeText=${this.pagination.searchTerm}`;
+        }
         let page = this.pagination.page;
         let rowsPerPage = this.pagination.rowsPerPage;
         let pageRange = this.cacheSize / rowsPerPage;
@@ -79,17 +85,21 @@ export default {
         if (
           currentPageStart != this.pageStart ||
           this.pagination.sortBy != this.lastSort ||
-          this.pagination.descending != this.lastDirection
+          this.pagination.descending != this.lastDirection ||
+          this.triggered
         ) {
           this.lastSort = this.pagination.sortBy;
+          this.triggered = false;
           this.lastDirection = this.pagination.descending;
           axios
             .get(
               `/api/ar/ListMyJobs?page=${currentPageStart}&pageSize=${this
-                .cacheSize}&sortBy=${this.pagination.sortBy}&dir=${dir}`,
+                .cacheSize}&sortBy=${this.pagination
+                .sortBy}&dir=${dir}${freeText}`,
               { withCredentials: true }
             )
             .then(result => {
+              this.totalItems = result.data.totalRecords;
               this.cache = result.data.pages;
               let subPage =
                 (page - 1) % Math.floor(this.cacheSize / rowsPerPage);
@@ -111,6 +121,12 @@ export default {
   },
 
   methods: {
+    searchFunction(e) {
+      if (e.keyCode === 13) {
+        this.pagination.searchTerm = this.search;
+        this.triggered = true;
+      }
+    },
     toggleAll() {
       if (this.selected.length) this.selected = [];
       else this.selected = this.items.slice();
