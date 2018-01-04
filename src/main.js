@@ -35,6 +35,9 @@ const routes = [
   {
     path: '/app/', component: AdminPanel, children: [{
       path: 'create', component: Create
+
+    }, {
+      path: 'create/:id', component: Create
     }, {
       path: 'viewPostedJobs', component: ViewAllPositions
     }, {

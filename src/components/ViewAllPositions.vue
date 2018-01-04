@@ -28,6 +28,7 @@
                         <td class="text-xs-right">{{ props.item.title }}</td>
                         <td class="text-xs-right">{{ props.item.category }}</td>
                         <td class="text-xs-right">{{ props.item.keywords }}</td>
+                        <td class="text-xs-right"><router-link :to="editLink(props.item.id)">Edit</router-link></td>
                         
                     </tr>
                 </template>
@@ -121,6 +122,9 @@ export default {
   },
 
   methods: {
+    editLink:(e) => {        
+        return `/app/create/${e}`;
+    },
     searchFunction(e) {
       if (e.keyCode === 13) {
         this.pagination.searchTerm = this.search;

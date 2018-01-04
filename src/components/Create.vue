@@ -37,7 +37,7 @@ export default {
   methods: {
     save: function() {
       var url = "/api/ar/job";
-      if (this.id != null) {        
+      if (this.id != null) {
         url = "/api/ar/job/" + this.id;
       }
       axios
@@ -72,6 +72,17 @@ export default {
       this.keywords = "";
       this.value = null;
     });
+    console.log(this.$route);
+    if (this.$route.params.id != null) {
+      axios.get("/api/ar/job/" + this.$route.params.id).then(response => {
+        this.id = response.data.id;
+        this.title = response.data.title;
+        this.content = response.data.body;
+        this.category = response.data.category;
+        this.keywords = response.data.keywords;
+        this.value = response.data.salary;
+      });
+    }
   },
   data() {
     return {
