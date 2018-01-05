@@ -33,6 +33,9 @@
                     </tr>
                 </template>
             </v-data-table>
+            <div class="text-xs-center pt-2">
+                <v-btn primary dark v-on:click="del">Delete</v-btn>
+            </div>
             </v-card>
     </main>
 </template>
@@ -47,7 +50,8 @@ export default {
       search: "",
       pagination: {
         sortBy: "",
-        searchTerm: ""
+        searchTerm: "",
+        refresh: false
       },
       triggered: false,
       selected: [],
@@ -68,7 +72,7 @@ export default {
   },
   watch: {
     pagination: {
-      handler() {
+      handler() {                
         let freeText = "";
         if (this.pagination.searchTerm != "") {
           freeText = `&freeText=${this.pagination.searchTerm}`;
@@ -87,8 +91,10 @@ export default {
           currentPageStart != this.pageStart ||
           this.pagination.sortBy != this.lastSort ||
           this.pagination.descending != this.lastDirection ||
-          this.triggered
+          this.triggered ||
+          this.pagination.refresh
         ) {
+          this.pagination.refresh = false
           this.lastSort = this.pagination.sortBy;
           this.triggered = false;
           this.lastDirection = this.pagination.descending;
@@ -122,14 +128,24 @@ export default {
   },
 
   methods: {
-    editLink:(e) => {        
-        return `/app/create/${e}`;
+    editLink: e => {
+      return `/app/create/${e}`;
     },
     searchFunction(e) {
       if (e.keyCode === 13) {
         this.pagination.searchTerm = this.search;
         this.triggered = true;
       }
+    },
+    del() {
+      var ids = _.map(this.selected, item => {
+        return item.id
+      });      
+      axios
+        .delete("/api/ar/job", { data: {ids: ids }})
+        .then(result => {
+          this.pagination.refresh = true;
+        });
     },
     toggleAll() {
       if (this.selected.length) this.selected = [];

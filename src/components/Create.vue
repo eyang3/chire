@@ -16,7 +16,7 @@
         <v-layout row>
             
             <v-flex xs8>
-                <v-btn  color="primary" class="blue--text darken-1"  v-on:click="save">Save</v-btn>
+                <v-btn  primary dark v-on:click="save">Save</v-btn>
             </v-flex>
             <v-flex xs4>
 

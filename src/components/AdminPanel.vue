@@ -88,13 +88,16 @@ export default {
   mounted: function() {
     axios
       .get("/api/ar/functionsByRole", { withCredentials: true })
-      .then(response => {
+      .then(response => {        
         this.items = _.filter(this.items, item => {
           if (response.data.indexOf(item.page) != -1) {
             return true;
           }
           return false;
         });
+      })
+      .catch(error => {
+        this.$router.push({ path: "/login" });
       });
   }
 };

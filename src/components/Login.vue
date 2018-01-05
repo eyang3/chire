@@ -14,8 +14,8 @@
                         <div style="color: red">{{error}}</div>
                         <v-spacer></v-spacer>
                         <center>
-                            <v-btn  color="primary" class="blue--text darken-1"  v-on:click="login">Login</v-btn>
-                            <v-btn  color="primary" class="blue--text darken-1"  v-on:click="createAccount">Create New Account</v-btn>
+                            <v-btn  primary dark v-on:click="login">Login</v-btn>
+                            <v-btn  primary dark  v-on:click="createAccount">Create New Account</v-btn>
                         </center>                    
                     </v-flex>
                     <v-flex></v-flex>

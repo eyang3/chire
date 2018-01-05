@@ -35,7 +35,8 @@
                 </template>
             </v-data-table>
             <div class="text-xs-center pt-2">
-                <v-btn primary dark @click.native.stop="dialog = true">Open Dialog</v-btn>
+                <v-btn primary dark @click.native.stop="dialog = true">Add Contacts</v-btn>            
+                <v-btn primary dark @click.native.stop="dialog = true">Delete Contacts</v-btn>
             </div>
             <v-dialog v-model="dialog">
                 <v-card>
