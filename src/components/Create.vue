@@ -17,6 +17,7 @@
             
             <v-flex xs8>
                 <v-btn  primary dark v-on:click="save">Save</v-btn>
+                <v-btn  primary dark v-on:click="save">Generate Application Link</v-btn>
             </v-flex>
             <v-flex xs4>
 

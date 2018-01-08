@@ -28,7 +28,12 @@
                         <td class="text-xs-right">{{ props.item.title }}</td>
                         <td class="text-xs-right">{{ props.item.category }}</td>
                         <td class="text-xs-right">{{ props.item.keywords }}</td>
-                        <td class="text-xs-right"><router-link :to="editLink(props.item.id)">Edit</router-link></td>
+                        <td class="text-xs-right">{{ props.item.last_modified }}</td>
+                        <td class="text-xs-right">
+                          <router-link :to="editLink(props.item.id)">Edit</router-link>
+                          <router-link :to="editLink(props.item.id)">Applicants</router-link>
+                          <router-link :to="editLink(props.item.id)">Manage Raters</router-link>
+                        </td>
                         
                     </tr>
                 </template>
@@ -59,6 +64,7 @@ export default {
         { text: "Title", value: "title" },
         { text: "Category", value: "category" },
         { text: "Keywords", value: "keywords" },
+        { text: "Last Updated", value: "last_modified" },
         { text: "Actions", value: "actions" }
       ],
       items: [],
@@ -67,12 +73,12 @@ export default {
       pageStart: 1,
       lastDirection: false,
       totalItems: 0,
-      cacheSize: 10
+      cacheSize: 50
     };
   },
   watch: {
     pagination: {
-      handler() {                
+      handler() {
         let freeText = "";
         if (this.pagination.searchTerm != "") {
           freeText = `&freeText=${this.pagination.searchTerm}`;
@@ -94,7 +100,7 @@ export default {
           this.triggered ||
           this.pagination.refresh
         ) {
-          this.pagination.refresh = false
+          this.pagination.refresh = false;
           this.lastSort = this.pagination.sortBy;
           this.triggered = false;
           this.lastDirection = this.pagination.descending;
@@ -139,13 +145,11 @@ export default {
     },
     del() {
       var ids = _.map(this.selected, item => {
-        return item.id
-      });      
-      axios
-        .delete("/api/ar/job", { data: {ids: ids }})
-        .then(result => {
-          this.pagination.refresh = true;
-        });
+        return item.id;
+      });
+      axios.delete("/api/ar/job", { data: { ids: ids } }).then(result => {
+        this.pagination.refresh = true;
+      });
     },
     toggleAll() {
       if (this.selected.length) this.selected = [];
@@ -161,16 +165,7 @@ export default {
     }
   },
   mounted: function() {
-    this.$emit("Hello");
-    axios
-      .get(`/api/ar/ListMyJobs?pageSize=${this.cacheSize}`, {
-        withCredentials: true
-      })
-      .then(result => {
-        this.cache = result.data.pages;
-        this.items = this.cache.slice(0, this.pagination.rowsPerPage);
-        this.totalItems = result.data.totalRecords;
-      });
+    this.pagination.refresh = true;
   }
 };
 </script>

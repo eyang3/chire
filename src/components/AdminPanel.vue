@@ -64,12 +64,12 @@ export default {
     footer: {
       fixed: false
     },
-    items: [
+    allRoutes: [
       { page: "create", icon: "add", text: "Create Position" },
       { page: "viewPostedJobs", icon: "content_copy", text: "View Positions" },
       { page: "manageContacts", icon: "contacts", text: "Manage Contacts" },
       { page: "toEvaluate", icon: "show_chart", text: "Evaluate Resumes" },
-      { page: "searchjobs", icon: "search", text: "Search Jobs" },
+      { page: "searchjobs", icon: "search", text: "My Jobs" },
       {
         page: "organization",
         icon: "supervisor_account",
@@ -77,7 +77,8 @@ export default {
       },
 
       { page: "settings", icon: "settings", text: "Settings" }
-    ]
+    ],
+    items: []
   }),
   methods: {
     navigate: function(item) {
@@ -89,7 +90,7 @@ export default {
     axios
       .get("/api/ar/functionsByRole", { withCredentials: true })
       .then(response => {        
-        this.items = _.filter(this.items, item => {
+        this.items = _.filter(this.allRoutes, item => {
           if (response.data.indexOf(item.page) != -1) {
             return true;
           }
