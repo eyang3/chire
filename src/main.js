@@ -1,9 +1,8 @@
 import Vue from 'vue'
-import App from './App.vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
 
-
+import VueCookie from 'vue-cookie';
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
 import AdminPanel from './components/AdminPanel.vue'
@@ -15,15 +14,21 @@ import Settings from './components/Settings.vue'
 import Apply from './components/Apply.vue'
 import ApplyJob from './components/ApplyJob.vue'
 import Dropzone from 'vue2-dropzone'
+import Unauthorized from './components/Unauthorized.vue'
+import Redirect from './components/Redirect.vue'
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(Dropzone);
+Vue.use(VueCookie);
 Vue.use(require('vue-cookies'))
 
 
 const routes = [
+  { path: '/unauthorized', component: Unauthorized},
+  { path: '/externLink/:token', component: Redirect},
   { path: '/login', component: Login },
+  { path: '/login/:token', component: Login },
   { path: '/register', component: Register },
   {
     path: '/apply/:user', component: Apply, children: [

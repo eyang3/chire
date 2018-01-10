@@ -1,48 +1,46 @@
 <template>
-    <main>
-           <v-card>
-            <v-card-title>
-                <v-spacer></v-spacer>
-                <v-text-field v-model = "search" v-on:keyup = "searchFunction" append-icon="search" label="Search" single-line hide-details ></v-text-field>
-            </v-card-title>
-            <v-data-table  v-model="selected" 
-            v-bind:headers="headers" 
-            v-bind:items.sync="items" v-bind:total-items.sync="totalItems" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
-                <template slot="headers" scope="props">
-                    <tr>
-                        <th>
-                            <v-checkbox primary hide-details @click.native="toggleAll" :input-value="props.all" :indeterminate="props.indeterminate"></v-checkbox>
-                        </th>
-                        <th v-for="header in props.headers" :key="header.text" :class="['text-xs-right', 'column sortable', pagination.descending ? 'desc' : 'asc', 
+  <main>
+    <v-card>
+      <v-card-title>
+        <v-spacer></v-spacer>
+        <v-text-field v-model="search" v-on:keyup="searchFunction" append-icon="search" label="Search" single-line hide-details></v-text-field>
+      </v-card-title>
+      <v-data-table v-model="selected" v-bind:headers="headers" v-bind:items.sync="items" v-bind:total-items.sync="totalItems" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
+        <template slot="headers" scope="props">
+          <tr>
+            <th>
+              <v-checkbox primary hide-details @click.native="toggleAll" :input-value="props.all" :indeterminate="props.indeterminate"></v-checkbox>
+            </th>
+            <th v-for="header in props.headers" :key="header.text" :class="['text-xs-right', 'column sortable', pagination.descending ? 'desc' : 'asc', 
                         header.value === pagination.sortBy ? 'active' : '']" @click="changeSort(header.value)">
-                            <v-icon>arrow_upward</v-icon>
-                            {{ header.text }}
-                        </th>
-                    </tr>
-                </template>
-                <template slot="items" scope="props">
-                    <tr :active="props.selected" @click="props.selected = !props.selected">
-                        <td>
-                            <v-checkbox primary hide-details :input-value="props.selected"></v-checkbox>
-                        </td>
-                        <td class="text-xs-right">{{ props.item.title }}</td>
-                        <td class="text-xs-right">{{ props.item.category }}</td>
-                        <td class="text-xs-right">{{ props.item.keywords }}</td>
-                        <td class="text-xs-right">{{ props.item.last_modified }}</td>
-                        <td class="text-xs-right">
-                          <router-link :to="editLink(props.item.id)">Edit</router-link>
-                          <router-link :to="editLink(props.item.id)">Applicants</router-link>
-                          <router-link :to="editLink(props.item.id)">Manage Raters</router-link>
-                        </td>
-                        
-                    </tr>
-                </template>
-            </v-data-table>
-            <div class="text-xs-center pt-2">
-                <v-btn primary dark v-on:click="del">Delete</v-btn>
-            </div>
-            </v-card>
-    </main>
+              <v-icon>arrow_upward</v-icon>
+              {{ header.text }}
+            </th>
+          </tr>
+        </template>
+        <template slot="items" scope="props">
+          <tr :active="props.selected" @click="props.selected = !props.selected">
+            <td>
+              <v-checkbox primary hide-details :input-value="props.selected"></v-checkbox>
+            </td>
+            <td class="text-xs-right">{{ props.item.title }}</td>
+            <td class="text-xs-right">{{ props.item.category }}</td>
+            <td class="text-xs-right">{{ props.item.keywords }}</td>
+            <td class="text-xs-right">{{ props.item.last_modified }}</td>
+            <td class="text-xs-right">
+              <router-link :to="editLink(props.item.id)">Edit</router-link>
+              <router-link :to="editLink(props.item.id)">Applicants</router-link>
+              <router-link :to="editLink(props.item.id)">Manage Raters</router-link>
+            </td>
+
+          </tr>
+        </template>
+      </v-data-table>
+      <div class="text-xs-center pt-2">
+        <v-btn primary dark v-on:click="del">Delete</v-btn>
+      </div>
+    </v-card>
+  </main>
 </template>
 
 <script>
@@ -169,3 +167,4 @@ export default {
   }
 };
 </script>
+

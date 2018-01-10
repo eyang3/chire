@@ -6,17 +6,17 @@
     </main>
 </template>
 <script>
-import Dropzone from 'vue2-dropzone'
+import Dropzone from "vue2-dropzone";
 export default {
-    components: {
-        Dropzone
-    },
+  components: {
+    Dropzone
+  },
 
-    methods: {
-      'showSuccess': function (file) {
-        console.log('A file was successfully uploaded')
-      }
+  methods: {
+    showSuccess: function(file) {
+      console.log("A file was successfully uploaded");
     }
-
-}
+  }
+};
 </script>
+

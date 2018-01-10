@@ -1,29 +1,29 @@
 <template>
 
-    <main>
-      <div align="right" style="position: absolute; align: right; right: 15px">
-        <v-alert color="success" dismissible transition="scale-transition" style="position:relative; z-index:100" v-model="showAlert">
-          Job Added!
-        </v-alert>
-      </div>
+  <main>
+    <div align="right" style="position: absolute; align: right; right: 15px">
+      <v-alert color="success" dismissible transition="scale-transition" style="position:relative; z-index:100" v-model="showAlert">
+        Job Added!
+      </v-alert>
+    </div>
 
-        <v-text-field label="Title" class="input-group--focused" v-model="title" required></v-text-field>
-        <v-text-field label="Category" class="input-group--focused" v-model="category"></v-text-field>
-        <v-text-field label="Keywords" class="input-group--focused" v-model="keywords"></v-text-field>
-        <v-text-field label="Salary -- Visible only to evaluators" class="input-group--focused" v-model="value"></v-text-field>                
-        <vue-editor v-model="content" placeholder="Position Description"></vue-editor>
-        <br>
-        <v-layout row>
-            
-            <v-flex xs8>
-                <v-btn  primary dark v-on:click="save">Save</v-btn>
-                <v-btn  primary dark v-on:click="save">Generate Application Link</v-btn>
-            </v-flex>
-            <v-flex xs4>
+    <v-text-field label="Title" class="input-group--focused" v-model="title" required></v-text-field>
+    <v-text-field label="Category" class="input-group--focused" v-model="category"></v-text-field>
+    <v-text-field label="Keywords" class="input-group--focused" v-model="keywords"></v-text-field>
+    <v-text-field label="Salary -- Visible only to evaluators" class="input-group--focused" v-model="value"></v-text-field>
+    <vue-editor v-model="content" placeholder="Position Description"></vue-editor>
+    <br>
+    <v-layout row>
 
-            </v-flex>
-        </v-layout>
-    </main>
+      <v-flex xs8>
+        <v-btn primary dark v-on:click="save">Save</v-btn>
+        <v-btn primary dark v-on:click="save">Generate Application Link</v-btn>
+      </v-flex>
+      <v-flex xs4>
+
+      </v-flex>
+    </v-layout>
+  </main>
 </template>
 
 <script>
@@ -73,7 +73,6 @@ export default {
       this.keywords = "";
       this.value = null;
     });
-    console.log(this.$route);
     if (this.$route.params.id != null) {
       axios.get("/api/ar/job/" + this.$route.params.id).then(response => {
         this.id = response.data.id;
@@ -99,5 +98,4 @@ export default {
   }
 };
 </script>
-
 
