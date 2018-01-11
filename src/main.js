@@ -16,7 +16,7 @@ import ApplyJob from './components/ApplyJob.vue'
 import Dropzone from 'vue2-dropzone'
 import Unauthorized from './components/Unauthorized.vue'
 import Redirect from './components/Redirect.vue'
-
+import SearchJobs from './components/SearchJobs.vue'
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(Dropzone);
@@ -25,18 +25,11 @@ Vue.use(require('vue-cookies'))
 
 
 const routes = [
-  { path: '/unauthorized', component: Unauthorized},
-  { path: '/externLink/:token', component: Redirect},
+  { path: '/unauthorized', component: Unauthorized },
+  { path: '/externLink/:token', component: Redirect },
   { path: '/login', component: Login },
   { path: '/login/:token', component: Login },
   { path: '/register', component: Register },
-  {
-    path: '/apply/:user', component: Apply, children: [
-      { path: 'viewall', component: ViewAllPositions, props: true },
-      { path: 'job/:job', component: ApplyJob },
-      { path: 'settings', component: Settings }
-    ]
-  },
   {
     path: '/app/', component: AdminPanel, children: [{
       path: 'create', component: Create
@@ -51,6 +44,8 @@ const routes = [
       path: 'organization', component: Organization
     }, {
       path: 'settings', component: Settings
+    }, {
+      path: 'searchjobs', component: SearchJobs
     }]
   },
 
