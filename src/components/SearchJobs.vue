@@ -28,9 +28,7 @@
             <td class="text-xs-right">{{ props.item.keywords }}</td>
             <td class="text-xs-right">{{ props.item.last_modified }}</td>
             <td class="text-xs-right">
-              <router-link :to="editLink(props.item.id)">Edit</router-link>
-              <router-link :to="editLink(props.item.id)">Applicants</router-link>
-              <router-link :to="editLink(props.item.id)">Manage Raters</router-link>
+              <router-link :to="Apply(props.item.id)">Apply</router-link>              
             </td>
 
           </tr>
@@ -132,8 +130,8 @@ export default {
   },
 
   methods: {
-    editLink: e => {
-      return `/app/create/${e}`;
+    Apply : e => {
+      return `/app/apply/${e}`;
     },
     searchFunction(e) {
       if (e.keyCode === 13) {

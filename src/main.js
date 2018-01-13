@@ -11,7 +11,6 @@ import Create from './components/Create.vue'
 import ManageContacts from './components/ManageContacts.vue'
 import Organization from './components/Organization.vue'
 import Settings from './components/Settings.vue'
-import Apply from './components/Apply.vue'
 import ApplyJob from './components/ApplyJob.vue'
 import Dropzone from 'vue2-dropzone'
 import Unauthorized from './components/Unauthorized.vue'
@@ -33,7 +32,8 @@ const routes = [
   {
     path: '/app/', component: AdminPanel, children: [{
       path: 'create', component: Create
-
+    }, {
+      path: 'apply/:id', component: ApplyJob
     }, {
       path: 'create/:id', component: Create
     }, {
