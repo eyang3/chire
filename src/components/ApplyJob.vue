@@ -9,15 +9,32 @@
 
       <v-card-text>
         <span v-html="body"></span>
+        <hr> EEOC Questionaire
+
+        <v-form>
+          <br> Gender
+          <br>
+          <input type="radio" id="Male" value="Male" v-model="gender">
+          <label for="Male">Male</label>
+          <input type="radio" id="Female" value="Female" v-model="gender">
+          <label for="Female">Female</label>
+          <br>
+          <br> Race
+          <div v-for="r of races">
+            <input type="radio" :id="r" :value="r" v-model="race">
+            <label for="r">{{r}}</label>
+          </div>
+
+        </v-form>
         <hr>
         <br>
         <label>
           Upload Resume
-          <input type="file" id="resume" name="resume" @change="addFile" />
+          <input type="file" id="resume" name="resume" />
         </label>
         <label>
           Upload Cover Letter (optional)
-          <input type="file" name="cover" @change="addFile">
+          <input type="file" id="cover" name="cover" />
         </label>
       </v-card-text>
       <v-btn primary dark v-on:click="save">Apply</v-btn>
@@ -34,29 +51,35 @@ export default {
   },
   data() {
     return {
+      races: [
+        "White (Non Hispanic or Latino)",
+        "Black or African American (Not Hispanic or Latino)",
+        "Native Hawaiian or Other Pacific Islander(Not Hispanic or Latino)",
+        "Asian(Not Hispanic or Latino)",
+        "American Indian or Alaska Native (Not Hispanic or Latino)",
+        "Two or More Races (Not Hispanic or Latino)",
+        "Hispanic or Latino",
+        "I do not wish to disclose"
+      ],
+      gender: [],
+      race: [],
       formData: null,
       title: "My Job",
       body: ""
     };
   },
   methods: {
-    addFile: function(e) {
-      console.log(e.target.files[0]);
-      this.formData.append("files[]", e.target.files[0]);
-      this.formData.append("entity[]", e.target.name);
-    },
-    showSuccess: function(file) {
-      console.log("A file was successfully uploaded");
-    },
     save: function() {
       var formData = new FormData();
       var resume = document.querySelector("#resume");
       formData.append("resume", resume.files[0]);
-            var imagefile = document.querySelector("#resume");
-      formData.append("resume", imagefile.files[0]);
+      var cover = document.querySelector("#cover");
+      formData.append("cover", cover.files[0]);
+      formData.append("race", this.race)
+      formData.append("gender", this.gender)
       axios
         .post(`/api/ar/testFile`, formData, {
-          withCredentials: true,          
+          withCredentials: true
         })
         .then(result => {
           console.log(result);

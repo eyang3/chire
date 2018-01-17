@@ -72,8 +72,7 @@ export default {
       .then(result => {
           console.log(result);
         try {        
-          var redirectInfo = JSON.parse(result.data.message);
-          console.log(redirectInfo)
+          var redirectInfo = JSON.parse(result.data.message);          
           if (redirectInfo.jobRef != null) {
               this.$router.push("/app")
           }

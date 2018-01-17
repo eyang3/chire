@@ -1,6 +1,6 @@
 <template>
   <v-app id="app" :dark="dark">
-    <v-navigation-drawer v-model="primaryDrawer.model" :clipped="true" absolute overflow persistant app>
+    <v-navigation-drawer :width="200" v-model="primaryDrawer.model" :clipped="true" absolute overflow persistant app>
       <v-list dense>
         <template v-for="(item, i) in items">
           <v-divider v-if="item.page == 'organization'"></v-divider>
@@ -14,8 +14,7 @@
               <a href="#!" class="body-2 black--text">EDIT</a>
             </v-flex>
           </v-layout>
-
-          <v-list-tile v-else @click="navigate(item)">
+          <v-list-tile v-else @click="navigate(item)" v-bind:style="stuff(item)">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -79,12 +78,29 @@ export default {
   }),
   methods: {
     navigate: function(item) {
-      this.$router.push({ path: "/app/" + item.page });
       this.$root.$emit(item.page);
+      //the date time forces refresh of the path if the same thing is clicked mulitple times
+      this.$router.push({
+        path: "/app/" + item.page + "?_=" + new Date().getTime()
+      });
+      for (var i = 0; i < this.items.length; i++) {
+        if (this.items[i].page === item.page) {
+          this.items[i].border = {
+            "border-left-style": "solid",
+            "border-left-color": "limegreen",
+            "border-left-width": "5px"
+          };
+        } else {
+          this.items[i].border = null;
+        }
+      }
     },
     logout: function() {
-      this.$cookie.delete("auth");      
+      this.$cookie.delete("auth");
       this.$router.push({ path: "/login" });
+    },
+    stuff: function(item) {
+      return item.border;
     }
   },
   mounted: function() {

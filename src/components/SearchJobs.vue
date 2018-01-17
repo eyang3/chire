@@ -28,7 +28,7 @@
             <td class="text-xs-right">{{ props.item.keywords }}</td>
             <td class="text-xs-right">{{ props.item.last_modified }}</td>
             <td class="text-xs-right">
-              <router-link :to="Apply(props.item.id)">Apply</router-link>              
+              <router-link :to="Apply(props.item.id)">Apply</router-link>
             </td>
 
           </tr>
@@ -36,6 +36,8 @@
       </v-data-table>
       <div class="text-xs-center pt-2">
         <v-btn primary dark v-on:click="del">Delete</v-btn>
+        <v-btn primary dark v-on:click="actionbutton()('hello')">One</v-btn>
+        <v-btn primary dark v-on:click="actionbutton()('byte')">Two</v-btn>
       </div>
     </v-card>
   </main>
@@ -130,8 +132,14 @@ export default {
   },
 
   methods: {
-    Apply : e => {
+    Apply: e => {
       return `/app/apply/${e}`;
+    },
+    actionbutton() {
+      var m = function(message) {
+        console.log(message);
+      }      
+      return(m);
     },
     searchFunction(e) {
       if (e.keyCode === 13) {

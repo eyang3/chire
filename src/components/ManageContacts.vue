@@ -148,6 +148,7 @@ export default {
   },
 
   methods: {
+    
     saveContact() {
       axios
         .put("/api/ar/contact", this.activeContact )
