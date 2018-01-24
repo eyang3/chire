@@ -30,12 +30,14 @@
             <td class="text-xs-right">
               <router-link :to="editLink(props.item.id)">Edit</router-link>
               <router-link :to="editLink(props.item.id)">Applicants</router-link>
-              <router-link :to="editLink(props.item.id)">Manage Raters</router-link>
+              <a style="text-decoration: underline;" v-on:click="manageRaters(props.item.id)">Manage Raters</a>
             </td>
 
           </tr>
         </template>
       </v-data-table>
+      <manage-raters :visible="setVisible" @close="setVisible = false"></manage-raters>
+      <manage-raters :visible="setVisible2" @close="setVisible2 = 'stuff'"></manage-raters>
       <div class="text-xs-center pt-2">
         <v-btn primary dark v-on:click="del">Delete</v-btn>
       </div>
@@ -46,10 +48,15 @@
 <script>
 var axios = require("axios");
 var _ = require("lodash");
-
+var manageRaters = require("./ManageRaters.vue");
 export default {
+  components: {
+    manageRaters: manageRaters
+  },
   data() {
     return {
+      setVisible: false,
+      setVisible2: 'meehee',
       search: "",
       pagination: {
         sortBy: "",
@@ -132,6 +139,9 @@ export default {
   },
 
   methods: {
+    manageRaters: function(e) {       
+      this.setVisible = true;      
+    },
     editLink: e => {
       return `/app/create/${e}`;
     },

@@ -1,61 +1,61 @@
 <template>
-    <main>
-           <v-card>
-            <v-card-title>
-                <v-spacer></v-spacer>
-                <v-text-field v-model = "search" v-on:keyup = "searchFunction" append-icon="search" label="Search" single-line hide-details ></v-text-field>
-            </v-card-title>
-            <v-data-table  v-model="selected" 
-            v-bind:headers="headers" 
-            v-bind:items.sync="items" v-bind:total-items.sync="totalItems" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
-                <template slot="headers" scope="props">
-                    <tr>
-                        <th>
-                            <v-checkbox primary hide-details @click.native="toggleAll" :input-value="props.all" :indeterminate="props.indeterminate"></v-checkbox>
-                        </th>
-                        <th v-for="header in props.headers" :key="header.text" :class="['text-xs-right', 'column sortable', pagination.descending ? 'desc' : 'asc', 
+  <main>
+    <v-card>
+      <v-card-title>
+        <v-spacer></v-spacer>
+        <v-text-field v-model="search" v-on:keyup="searchFunction" append-icon="search" label="Search" single-line hide-details></v-text-field>
+      </v-card-title>
+      <v-data-table v-model="selected" v-bind:headers="headers" v-bind:items.sync="items" v-bind:total-items.sync="totalItems" select-all v-bind:pagination.sync="pagination" selected-key="name" class="elevation-1">
+        <template slot="headers" scope="props">
+          <tr>
+            <th>
+              <v-checkbox primary hide-details @click.native="toggleAll" :input-value="props.all" :indeterminate="props.indeterminate"></v-checkbox>
+            </th>
+            <th v-for="header in props.headers" :key="header.text" :class="['text-xs-right', 'column sortable', pagination.descending ? 'desc' : 'asc', 
                         header.value === pagination.sortBy ? 'active' : '']" @click="changeSort(header.value)">
-                            <v-icon>arrow_upward</v-icon>
-                            {{ header.text }}
-                        </th>
-                    </tr>
-                </template>
-                <template slot="items" scope="props">
-                    <tr :active="props.selected" @click="props.selected = !props.selected">
-                        <td>
-                            <v-checkbox primary hide-details :input-value="props.selected"></v-checkbox>
-                        </td>
-                        <td class="text-xs-right">{{ props.item.email }}</td>
-                        <td class="text-xs-right">{{ props.item.name }}</td>
-                        <td class="text-xs-right">{{ props.item.label }}</td>                        
-                        <td class="text-xs-right"><a v-on:click="Contacts(props.item)">Edit</a></td>                        
-                    </tr>
-                </template>
-            </v-data-table>
-            <div class="text-xs-center pt-2">
-                <v-btn primary dark v-on:click="del">Delete</v-btn>
-                <v-btn primary dark v-on:click="newContact()">Add Contacts</v-btn>
-            </div>
-            </v-card>
-              <v-dialog v-model="dialog" max-width="700">
-                 <v-card>
-                     <v-card-title>
-                         <div class="headline">Add/Edit Contact</div>
-                     </v-card-title>
-                     <v-form style="padding: 20px">
-                    <v-text-field label="Email" class="input-group--focused" v-model="activeContact.email" required></v-text-field>
-                    <v-text-field label="Name" class="input-group--focused" v-model="activeContact.name" required></v-text-field>
-                    <v-text-field label="Label" class="input-group--focused" v-model="activeContact.label" required></v-text-field>
+              <v-icon>arrow_upward</v-icon>
+              {{ header.text }}
+            </th>
+          </tr>
+        </template>
+        <template slot="items" scope="props">
+          <tr :active="props.selected" @click="props.selected = !props.selected">
+            <td>
+              <v-checkbox primary hide-details :input-value="props.selected"></v-checkbox>
+            </td>
+            <td class="text-xs-right">{{ props.item.email }}</td>
+            <td class="text-xs-right">{{ props.item.name }}</td>
+            <td class="text-xs-right">{{ props.item.label }}</td>
+            <td class="text-xs-right">
+              <a v-on:click="Contacts(props.item)">Edit</a>
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
+      <div class="text-xs-center pt-2">
+        <v-btn primary dark v-on:click="del">Delete</v-btn>
+        <v-btn primary dark v-on:click="newContact()">Add Contacts</v-btn>
+      </div>
+    </v-card>
+    <v-dialog v-model="dialog" max-width="700">
+      <v-card>
+        <v-card-title>
+          <div class="headline">Add/Edit Contact</div>
+        </v-card-title>
+        <v-form style="padding: 20px">
+          <v-text-field label="Email" class="input-group--focused" v-model="activeContact.email" required></v-text-field>
+          <v-text-field label="Name" class="input-group--focused" v-model="activeContact.name" required></v-text-field>
+          <v-text-field label="Label" class="input-group--focused" v-model="activeContact.label" required></v-text-field>
+        </v-form>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn class="green--text darken-1" flat="flat" @click.native="saveContact()">Submit</v-btn>
+          <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-                    </v-form>
-                     <v-card-actions>
-                         <v-spacer></v-spacer>
-                         <v-btn class="green--text darken-1" flat="flat" @click.native="saveContact()">Submit</v-btn>
-                         <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Cancel</v-btn>
-                     </v-card-actions>
-                 </v-card>
-             </v-dialog>
-    </main>
+  </main>
 </template>
 
 <script>
@@ -87,7 +87,7 @@ export default {
       lastDirection: false,
       totalItems: 0,
       cacheSize: 50,
-      activeContact: {name: '', email: '', label: ''}
+      activeContact: { name: "", email: "", label: "" }
     };
   },
   watch: {
@@ -148,14 +148,11 @@ export default {
   },
 
   methods: {
-    
     saveContact() {
-      axios
-        .put("/api/ar/contact", this.activeContact )
-        .then(result => {
-          this.dialog = false
-          this.pagination.refresh = true;
-        });
+      axios.put("/api/ar/contact", this.activeContact).then(result => {
+        this.dialog = false;
+        this.pagination.refresh = true;
+      });
     },
     newContact() {
       this.dialog = true;
