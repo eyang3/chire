@@ -27,15 +27,23 @@
 
         </v-form>
         <hr>
-        <br>
-        <label>
-          Upload Resume
-          <input type="file" id="resume" name="resume" />
-        </label>
-        <label>
-          Upload Cover Letter (optional)
-          <input type="file" id="cover" name="cover" />
-        </label>
+        <br>        
+        <div class="input-group">
+          <input type="text" :value="selectedFile" class="form-control" readonly>
+          <span class="input-group-btn">
+            <span class="btn btn-primary btn-file">
+              Browse<input type="file" id="cover" name="cover" @change="input"  single>
+            </span>
+          </span>        
+        </div></span>
+        <div class="input-group">
+          <input type="text" :value="selectedFile" class="form-control" readonly>
+          <span class="input-group-btn">
+            <span class="btn btn-primary btn-file">
+              Browse<input type="file" id="resume" name="resume" @change="(e) => {input(e, selectedFile)}"  single>
+            </span>
+          </span>        
+        </div>
       </v-card-text>
       <v-btn primary dark v-on:click="save">Apply</v-btn>
     </v-card>
@@ -51,6 +59,7 @@ export default {
   },
   data() {
     return {
+      selectedFile: 'Upload Resume',
       races: [
         "White (Non Hispanic or Latino)",
         "Black or African American (Not Hispanic or Latino)",
@@ -69,14 +78,20 @@ export default {
     };
   },
   methods: {
+    input: function( event, obj) {   
+      obj = event.target.files[0].name
+      
+      
+      
+    },
     save: function() {
       var formData = new FormData();
       var resume = document.querySelector("#resume");
       formData.append("resume", resume.files[0]);
       var cover = document.querySelector("#cover");
       formData.append("cover", cover.files[0]);
-      formData.append("race", this.race)
-      formData.append("gender", this.gender)
+      formData.append("race", this.race);
+      formData.append("gender", this.gender);
       axios
         .post(`/api/ar/testFile`, formData, {
           withCredentials: true

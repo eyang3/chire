@@ -30,18 +30,17 @@
             <td class="text-xs-right">
               <router-link :to="editLink(props.item.id)">Edit</router-link>
               <router-link :to="editLink(props.item.id)">Applicants</router-link>
-              <a style="text-decoration: underline;" v-on:click="manageRaters(props.item.id)">Manage Raters</a>
+              <a style="color: #1976D2" onmouseout="style='text-decoration:none;color: #1976D2'" onmouseover="style='text-decoration:underline;color: #1976D2'" v-on:click="manageRatersModal(props.item.id)">Manage Raters</a>
             </td>
 
           </tr>
         </template>
       </v-data-table>
-      <manage-raters :visible="setVisible" @close="setVisible = false"></manage-raters>
-      <manage-raters :visible="setVisible2" @close="setVisible2 = 'stuff'"></manage-raters>
+      <manage-raters :visible="setVisible" @close="testFunc"></manage-raters>
       <div class="text-xs-center pt-2">
         <v-btn primary dark v-on:click="del">Delete</v-btn>
       </div>
-    </v-card>
+    </v-card>    
   </main>
 </template>
 
@@ -49,6 +48,8 @@
 var axios = require("axios");
 var _ = require("lodash");
 var manageRaters = require("./ManageRaters.vue");
+import paginationHandler from "./paginationHandler.vue";
+
 export default {
   components: {
     manageRaters: manageRaters
@@ -56,7 +57,6 @@ export default {
   data() {
     return {
       setVisible: false,
-      setVisible2: 'meehee',
       search: "",
       pagination: {
         sortBy: "",
@@ -83,64 +83,21 @@ export default {
   },
   watch: {
     pagination: {
-      handler() {
-        let freeText = "";
-        if (this.pagination.searchTerm != "") {
-          freeText = `&freeText=${this.pagination.searchTerm}`;
-        }
-        let page = this.pagination.page;
-        let rowsPerPage = this.pagination.rowsPerPage;
-        let pageRange = this.cacheSize / rowsPerPage;
-        let currentPageStart =
-          Math.floor((page - 1) / (this.cacheSize / rowsPerPage)) + 1;
-        let dir = "ASC";
-        if (this.pagination.descending) {
-          dir = "DESC";
-        }
-
-        if (
-          currentPageStart != this.pageStart ||
-          this.pagination.sortBy != this.lastSort ||
-          this.pagination.descending != this.lastDirection ||
-          this.triggered ||
-          this.pagination.refresh
-        ) {
-          this.pagination.refresh = false;
-          this.lastSort = this.pagination.sortBy;
-          this.triggered = false;
-          this.lastDirection = this.pagination.descending;
-          axios
-            .get(
-              `/api/ar/ListMyJobs?page=${currentPageStart}&pageSize=${this
-                .cacheSize}&sortBy=${this.pagination
-                .sortBy}&dir=${dir}${freeText}`,
-              { withCredentials: true }
-            )
-            .then(result => {
-              this.totalItems = result.data.totalRecords;
-              this.cache = result.data.pages;
-              let subPage =
-                (page - 1) % Math.floor(this.cacheSize / rowsPerPage);
-              this.items = this.cache.slice(
-                subPage * rowsPerPage,
-                (subPage + 1) * rowsPerPage
-              );
-            });
-        } else {
-          let subPage = (page - 1) % Math.floor(this.cacheSize / rowsPerPage);
-          this.items = this.cache.slice(
-            subPage * rowsPerPage,
-            (subPage + 1) * rowsPerPage
-          );
-        }
+      handler() {                
+        paginationHandler.paginationHander(this, '/api/ar/ListMyJobs');        
       },
       deep: true
     }
   },
 
   methods: {
-    manageRaters: function(e) {       
-      this.setVisible = true;      
+    manageRatersModal: function(e) {
+      console.log("heee");
+      this.setVisible = true;
+    },
+    testFunc: function(args) {
+      this.setVisible = false;
+      console.log(args);
     },
     editLink: e => {
       return `/app/create/${e}`;

@@ -71,7 +71,6 @@ export default {
         icon: "supervisor_account",
         text: "Organization"
       },
-
       { page: "settings", icon: "settings", text: "Settings" }
     ],
     items: []
