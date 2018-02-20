@@ -46,7 +46,7 @@
 <script>
 var axios = require("axios");
 var _ = require("lodash");
-
+import paginationHandler from "./paginationHandler.vue";
 export default {
   data() {
     return {
@@ -77,55 +77,7 @@ export default {
   watch: {
     pagination: {
       handler() {
-        let freeText = "";
-        if (this.pagination.searchTerm != "") {
-          freeText = `&freeText=${this.pagination.searchTerm}`;
-        }
-        let page = this.pagination.page;
-        let rowsPerPage = this.pagination.rowsPerPage;
-        let pageRange = this.cacheSize / rowsPerPage;
-        let currentPageStart =
-          Math.floor((page - 1) / (this.cacheSize / rowsPerPage)) + 1;
-        let dir = "ASC";
-        if (this.pagination.descending) {
-          dir = "DESC";
-        }
-
-        if (
-          currentPageStart != this.pageStart ||
-          this.pagination.sortBy != this.lastSort ||
-          this.pagination.descending != this.lastDirection ||
-          this.triggered ||
-          this.pagination.refresh
-        ) {
-          this.pagination.refresh = false;
-          this.lastSort = this.pagination.sortBy;
-          this.triggered = false;
-          this.lastDirection = this.pagination.descending;
-          axios
-            .get(
-              `/api/ar/ListMyApplications?page=${currentPageStart}&pageSize=${this
-                .cacheSize}&sortBy=${this.pagination
-                .sortBy}&dir=${dir}${freeText}`,
-              { withCredentials: true }
-            )
-            .then(result => {
-              this.totalItems = result.data.totalRecords;
-              this.cache = result.data.pages;
-              let subPage =
-                (page - 1) % Math.floor(this.cacheSize / rowsPerPage);
-              this.items = this.cache.slice(
-                subPage * rowsPerPage,
-                (subPage + 1) * rowsPerPage
-              );
-            });
-        } else {
-          let subPage = (page - 1) % Math.floor(this.cacheSize / rowsPerPage);
-          this.items = this.cache.slice(
-            subPage * rowsPerPage,
-            (subPage + 1) * rowsPerPage
-          );
-        }
+        paginationHandler.paginationHander(this, this.pagination, '/api/ar/ListMyApplications')        
       },
       deep: true
     }

@@ -84,15 +84,14 @@ export default {
   watch: {
     pagination: {
       handler() {                
-        paginationHandler.paginationHander(this, '/api/ar/ListMyJobs');        
+        paginationHandler.paginationHander(this, this.pagination, '/api/ar/ListMyJobs');        
       },
       deep: true
     }
   },
 
   methods: {
-    manageRatersModal: function(e) {
-      console.log("heee");
+    manageRatersModal: function(e) {      
       this.setVisible = true;
     },
     testFunc: function(args) {
