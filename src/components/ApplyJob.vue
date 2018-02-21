@@ -82,20 +82,20 @@ export default {
   methods: {
     input: function(event, obj) {
       obj = event.target.files[0].name;
-      this.$data[event.target.name] = event.target.files[0].name;      
+      this.$data[event.target.name] = event.target.files[0].name;
     },
     save: function() {
+      var id = this.$route.params.id;
       var formData = new FormData();
       var resume = document.querySelector("#resumeFile");
-      console.log(resume);
+
       formData.append("resume", resume.files[0]);
       var cover = document.querySelector("#coverFile");
-      console.log(cover);
       formData.append("cover", cover.files[0]);
       formData.append("race", this.race);
       formData.append("gender", this.gender);
       axios
-        .post(`/api/ar/testFile`, formData, {
+        .post(`/api/ar/apply/${id}`, formData, {
           withCredentials: true
         })
         .then(result => {
@@ -106,11 +106,20 @@ export default {
   mounted: function() {
     this.formData = new FormData();
     var id = this.$route.params.id;
-    axios.get(`/api/ar/job/${id}`, { withCredentials: true }).then(result => {
-      this.title = result.data.title;
-      this.body = result.data.body;
-    });
-    console.log(id);
+    axios
+      .get(`/api/ar/JobApplication/${id}`, { withCredentials: true })
+      .then(result => {
+        this.title = result.data[0].title;
+        this.body = result.data[0].body;
+        this.race = result.data[0].eeoc_race;
+        this.gender = result.data[0].eeoc_gender;
+        if (result.data[0].resumename != null) {
+          this.resumeFile = result.data[0].resumename;
+        }
+        if (result.data[0].covername != null) {
+          this.coverFile = result.data[0].covername;
+        }
+      });
   }
 };
 </script>
