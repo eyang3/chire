@@ -28,17 +28,17 @@
         </v-form>
         <hr>
         <br>
-        <div class="input-group">
-          <input type="text" :value="resumeFile" class="form-control" readonly>
+        <div class="input-group" style="border-top-right-radius: 0; border-bottom-right-radius: 0">
+          <input type="text" :value="resumeFile" readonly style="padding-left: 5px; border-style: solid; width: 80%; border-color: Gainsboro; border-width: 1px">
           <span class="input-group-btn">
             <span class="btn btn-primary btn-file">
               Browse<input type="file" id="resumeFile" name="resumeFile" @change="(e) => {input(e, resumeFile)}" single>
             </span>
           </span>
         </div>
-        </span>
+
         <div class="input-group">
-          <input type="text" :value="coverFile" class="form-control" readonly>
+          <input type="text" :value="coverFile" readonly style="padding-left: 5px;border-style: solid; width: 80%; border-color: Gainsboro; border-width: 1px">
           <span class="input-group-btn">
             <span class="btn btn-primary btn-file">
               Browse<input type="file" id="coverFile" name="coverFile" @change="(e) => {input(e, coverFile)}" single>
@@ -49,6 +49,7 @@
       <v-btn primary dark v-on:click="save">Apply</v-btn>
     </v-card>
     </div>
+
   </main>
 </template>
 <script>
@@ -123,4 +124,3 @@ export default {
   }
 };
 </script>
-

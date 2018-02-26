@@ -30,17 +30,14 @@
             <td class="text-xs-right">
               <router-link :to="editLink(props.item.id)">Edit</router-link>
               <router-link :to="editLink(props.item.id)">Applicants</router-link>
-              <a style="color: #1976D2" onmouseout="style='text-decoration:none;color: #1976D2'" onmouseover="style='text-decoration:underline;color: #1976D2'" v-on:click="manageRatersModal(props.item.id)">Manage Raters</a>
+              <a style="color: #1976D2; text-decoration:underline" v-on:click="manageRatersModal(props.item.id)">Manage Raters</a>
             </td>
 
           </tr>
         </template>
       </v-data-table>
       <manage-raters :visible="setVisible" @close="testFunc"></manage-raters>
-      <div class="text-xs-center pt-2">
-        <v-btn primary dark v-on:click="del">Delete</v-btn>
-      </div>
-    </v-card>    
+    </v-card>
   </main>
 </template>
 
@@ -83,15 +80,19 @@ export default {
   },
   watch: {
     pagination: {
-      handler() {                
-        paginationHandler.paginationHander(this, this.pagination, '/api/ar/ListMyJobs');        
+      handler() {
+        paginationHandler.paginationHander(
+          this,
+          this.pagination,
+          "/api/ar/ListMyJobs"
+        );
       },
       deep: true
     }
   },
 
   methods: {
-    manageRatersModal: function(e) {      
+    manageRatersModal: function(e) {
       this.setVisible = true;
     },
     testFunc: function(args) {
