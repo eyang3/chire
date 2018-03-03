@@ -40,7 +40,7 @@
             </v-card>
           </v-flex>
           <v-flex xs2 class="text-xs-center">
-            <v-btn   @click.native="test2"  style="left: -20px" small fab dark color="light-green">
+            <v-btn @click.native="test2" style="left: -20px" small fab dark color="light-green">
               <v-icon dark>add</v-icon>
             </v-btn>
             <br>
@@ -92,7 +92,7 @@
               <v-card flat style="left: -20px">
                 <p class="text-xs-right">
                   <v-btn primary dark @click.native="newContact">Send Request</v-btn>
-                  <v-btn primary dark @click.native="dialog = false">Cancel</v-btn>
+                  <v-btn primary dark @click.native="cancel">Cancel</v-btn>
                 </p>
               </v-card>
             </v-flex>
@@ -108,16 +108,19 @@ var axios = require("axios");
 var _ = require("lodash");
 import paginationHandler from "./paginationHandler.vue";
 export default {
-  props: ["visible"],
+  props: ["visible", "currentid"],
   data() {
     return {
+      contactHash: {},
+      itemHash: {},
       pagination1: {
         search: "",
         dialog: false,
         pagination: {
           sortBy: "",
           searchTerm: "",
-          refresh: false
+          refresh: false,
+          triggered: false
         },
         selected: [],
         items: [],
@@ -157,33 +160,57 @@ export default {
   },
   methods: {
     newContact: function() {
+      var url = `/api/ar/evalrequest/${this.currentid}`;
+      var ids = _.map(this.pagination2.items, i => {
+        return i.contactref;
+      });
+      axios.post(url, ids);
       this.$emit("close", "Hello World");
+    },
+    cancel: function() {
+      this.pagination2.items = [];
+      this.contactHash = {};
+      this.$emit("close");
     },
     searchFunction(e) {
       if (e.keyCode === 13) {
-        this.pagination.searchTerm = this.search;
+        this.pagination2.searchTerm = this.search;
         this.triggered = true;
       }
     },
     searchFunction1(e) {
       if (e.keyCode === 13) {
-        this.pagination.searchTerm = this.search;
-        this.triggered = true;
+        this.pagination1.pagination.searchTerm = this.pagination1.search;
+        this.pagination1.pagination.triggered = true;
       }
     },
-    test() {
-      console.log("stuff");
-    },
-    test2() {      
-      if( this.pagination1.selected != null) {
+    test2() {
+      if (this.pagination1.items != null) {
         this.pagination1.selected.forEach(i => {
-          this.pagination2.items.push(i);
-        })
+          if (this.contactHash[i.contactref] == null) {
+            this.pagination2.items.push(i);
+            this.contactHash[i.contactref] = 1;
+          }
+        });
       }
-      console.log( this.pagination1.selected.length     )
     }
   },
   watch: {
+    visible: {
+      handler() {
+        if (this.visible == true) {
+          _.each(this.pagination1.items, i => {
+            this.itemHash[i.id] = i;
+          });
+          axios.get(`/api/ar/evalrequest/${this.currentid}`).then(result => {
+            console.log(this.itemHash);
+            _.each(result.data, i => {
+              this.pagination2.items.push(this.itemHash[i.id]);
+            });
+          });
+        }
+      }
+    },
     "pagination1.pagination": {
       handler() {
         paginationHandler.paginationHander(

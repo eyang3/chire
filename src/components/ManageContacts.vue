@@ -108,7 +108,7 @@ export default {
       axios.put("/api/ar/contact", this.activeContact).then(result => {
         this.dialog = false;
         this.pagination.refresh = true;
-      });
+      })  ;
     },
     newContact() {
       this.dialog = true;

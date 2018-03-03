@@ -19,7 +19,7 @@
           </tr>
         </template>
         <template slot="items" scope="props">
-          <tr :active="props.selected" @click="props.selected = !props.selected">
+          <tr :active="props.selected" @click="props.selected = !props.selected">           
             <td>
               <v-checkbox primary hide-details :input-value="props.selected"></v-checkbox>
             </td>
@@ -36,7 +36,7 @@
           </tr>
         </template>
       </v-data-table>
-      <manage-raters :visible="setVisible" @close="testFunc"></manage-raters>
+      <manage-raters :currentid="selectedJob" :visible="setVisible" @close="testFunc"></manage-raters>
     </v-card>
   </main>
 </template>
@@ -53,6 +53,7 @@ export default {
   },
   data() {
     return {
+      selectedJob: null,
       setVisible: false,
       search: "",
       pagination: {
@@ -94,10 +95,10 @@ export default {
   methods: {
     manageRatersModal: function(e) {
       this.setVisible = true;
+      this.selectedJob = e;      
     },
     testFunc: function(args) {
-      this.setVisible = false;
-      console.log(args);
+      this.setVisible = false;      
     },
     editLink: e => {
       return `/app/create/${e}`;

@@ -88,8 +88,7 @@ export default {
       return `/app/apply/${e}`;
     },
     actionbutton() {
-      var m = function(message) {
-        console.log(message);
+      var m = function(message) {        
       }      
       return(m);
     },
