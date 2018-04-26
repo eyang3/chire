@@ -1,4 +1,6 @@
 import Vue from 'vue'
+// if performance is an issue use a la carte imports
+// from vuetify
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
 
@@ -16,6 +18,7 @@ import Dropzone from 'vue2-dropzone'
 import Unauthorized from './components/Unauthorized.vue'
 import Redirect from './components/Redirect.vue'
 import SearchJobs from './components/SearchJobs.vue'
+import Evaluate from './components/Evaluate.vue'
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(Dropzone);
@@ -46,6 +49,8 @@ const routes = [
       path: 'settings', component: Settings
     }, {
       path: 'searchjobs', component: SearchJobs
+    }, {
+      path: 'toevaluate', component: Evaluate
     }]
   },
 
@@ -53,8 +58,5 @@ const routes = [
 const router = new VueRouter({ routes });
 
 const app = new Vue({
-  router,
-  mounted: function () {
-    console.log('mounted');
-  }
+  router
 }).$mount("#app");

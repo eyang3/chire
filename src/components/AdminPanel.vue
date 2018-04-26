@@ -3,7 +3,7 @@
     <v-navigation-drawer :width="200" v-model="primaryDrawer.model" :clipped="true" absolute overflow persistant app>
       <v-list dense>
         <template v-for="(item, i) in items">
-          <v-divider v-if="item.page == 'organization'"></v-divider>
+          <v-divider v-if="item.page == 'organization'" :key="i"></v-divider>
           <v-layout row v-if="item.heading" align-center :key="i">
             <v-flex xs6>
               <v-subheader v-if="item.heading">
@@ -14,7 +14,7 @@
               <a href="#!" class="body-2 black--text">EDIT</a>
             </v-flex>
           </v-layout>
-          <v-list-tile v-else @click="navigate(item)" v-bind:style="stuff(item)">
+          <v-list-tile v-else @click="navigate(item)" v-bind:style="stuff(item)" :key="i">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -64,7 +64,7 @@ export default {
       { page: "create", icon: "add", text: "Create Position" },
       { page: "viewPostedJobs", icon: "content_copy", text: "View Positions" },
       { page: "manageContacts", icon: "contacts", text: "Manage Contacts" },
-      { page: "toEvaluate", icon: "show_chart", text: "Evaluate Resumes" },
+      { page: "toevaluate", icon: "show_chart", text: "Evaluate Resumes" },
       { page: "searchjobs", icon: "search", text: "My Jobs" },
       {
         page: "organization",
@@ -72,6 +72,7 @@ export default {
         text: "Organization"
       },
       { page: "settings", icon: "settings", text: "Settings" }
+      
     ],
     items: []
   }),

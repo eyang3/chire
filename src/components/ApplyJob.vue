@@ -20,7 +20,7 @@
           <label for="Female">Female</label>
           <br>
           <br> Race
-          <div v-for="r of races">
+          <div v-for="r of races" v-bind:key="r">
             <input type="radio" :id="r" :value="r" v-model="race">
             <label for="r">{{r}}</label>
           </div>

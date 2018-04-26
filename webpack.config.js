@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
@@ -47,22 +48,25 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm.js'
     }
   },
-  devServer: {   
+  devServer: {
     proxy: {
       '/api/**': {
         target: 'http://localhost:3000/',
         secure: false,
-        changeOrigin:true,
+        changeOrigin: true,
         pathRewrite: function (path, req) { return path.replace('/api', '/') }
-        
+
       }
     }
 
-  },
+  }, 
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+    new UglifyJSPlugin()
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {

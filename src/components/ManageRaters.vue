@@ -54,9 +54,9 @@
               <v-card-text class="subheading">Selected Contacts</v-card-text>
               <v-card-title>
                 <v-spacer></v-spacer>
-                <v-text-field v-model="pagination2.search" v-on:keyup="searchFunction" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                <v-text-field v-model="pagination2.search" append-icon="search" label="Search" single-line hide-details></v-text-field>
               </v-card-title>
-              <v-data-table v-model="pagination2.selected" v-bind:headers="headers" v-bind:items="pagination2.items" selected-key="name" class="elevation-1">
+              <v-data-table :search ="pagination2.search" v-model="pagination2.selected" v-bind:headers="headers" v-bind:items="pagination2.items" selected-key="name" class="elevation-1">
                 <template slot="headers" scope="props">
                   <tr>
                     <th>
